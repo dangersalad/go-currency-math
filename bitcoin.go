@@ -39,12 +39,17 @@ func (b Bitcoin) Div(v Bitcoin) Bitcoin {
 	return b.div(v).(Bitcoin)
 }
 
+// Value returns the rounded or truncated value
+func (b Bitcoin) Value() float64 {
+	return floatToFloat(packageLevelRounding, decimalsBTC, b.value())
+}
+
 func (b Bitcoin) value() float64 {
-	return floatToFloat(decimalsBTC, float64(b))
+	return float64(b)
 }
 
 func (b Bitcoin) baseValue() int64 {
-	return floatToInt(decimalsBTC, b)
+	return floatToInt(packageLevelRounding, decimalsBTC, b.value())
 }
 
 func (b Bitcoin) add(v mather) mather {
@@ -56,11 +61,11 @@ func (b Bitcoin) sub(v mather) mather {
 }
 
 func (b Bitcoin) mult(v mather) mather {
-	return Bitcoin(floatToFloat(decimalsBTC, b.value()*v.value()))
+	return Bitcoin(floatToFloat(packageLevelRounding, decimalsBTC, b.value()*v.value()))
 }
 
 func (b Bitcoin) div(v mather) mather {
-	return Bitcoin(floatToFloat(decimalsBTC, b.value()/v.value()))
+	return Bitcoin(floatToFloat(packageLevelRounding, decimalsBTC, b.value()/v.value()))
 }
 
 // BitcoinToFiat converts a bitcoin value to a fiat value based on the
